@@ -14,7 +14,7 @@ function App() {
     <Provider store={store}>
       <BrowserRouter>
         <div className="App">
-          <RouteHome/>
+          
           <NotificationContainer/>
         </div>
       </BrowserRouter>
