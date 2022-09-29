@@ -250,3 +250,6 @@ export const { setLoader,setViewBook,setAdmin,
     
  }=mainSlice.actions
 export default mainSlice.reducer
+
+// export const { addManga, delManga, replicateManga } = mangaSlice.actions;
+// export default mangaSlice.reducer;
