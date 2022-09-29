@@ -51,16 +51,9 @@ function Home() {
             .filter(bookFilter)
             .map(book=>book.category)
             .filter((e,i,a)=>a.indexOf(e)===i)
-<<<<<<< HEAD
-<<<<<<< HEAD
-            .map(category=><CategoryBar category={category} key={category}/>)}
-            {/* .map(category=><CategoryBar category={category} key={category} bookFilter={bookFilter} />)} */}
-=======
+            // .map(category=><CategoryBar category={category} key={category}/>)}
+            // {/* .map(category=><CategoryBar category={category} key={category} bookFilter={bookFilter} />)} */}
             .map(category=><CategoryBar category={category} key={category} bookFilter={bookFilter} />)}
->>>>>>> Divya
-=======
-            .map(category=><CategoryBar category={category} key={category} bookFilter={bookFilter} />)}
->>>>>>> ebcd366b09d0c1e1ccc9db8566c56027ccb3e029
         </div>
     </div>
   )
