@@ -9,7 +9,8 @@ import {
     httpValidateLogin,
     httpGetOrdersOfUser,
     httpRegisterUser,
-    httpCancelOrder
+    httpCancelOrder,
+    httpDeleteBook
 } from '../requests/requests'
 
 import NotificationManager from "react-notifications/lib/NotificationManager"
@@ -34,10 +35,20 @@ const initalState={
 }
 
 
+// thunk creation using createAsyncThunk
+// 1) create a funtion like below for an async task
+// 2) add the case to for that functon.[fullfilled,rejected,pending] to the builder addCase()
+// 3) handle state updates there
+// 4) export the function for use in components ( use same as normal actions)
 
+// https://redux-toolkit.js.org/api/createAsyncThunk#:~:text=thunkAPI%20%3A%20an%20object%20containing%20all,middleware%20on%20setup%2C%20if%20available
+// refer this one
+
+// createAsyncThunk's function is called "payloadCreator"
+// createAsycThunk accepts first param as arg
 
 export const getAllBooks=createAsyncThunk('/main/getAllBooks',async ()=>{
-    
+    // erasing await gives same op?? (how?)
     const res=await httpGetBooks()
     console.log(res)
     return res
@@ -76,6 +87,22 @@ export const validateLogin=createAsyncThunk('main/validateLogin',async ({usernam
 
 export const registerUser=createAsyncThunk('main/registerUser',async ({username,password})=>{
     const res=await httpRegisterUser(username,password)
+    return res
+})
+
+export const deleteBook=createAsyncThunk('/main/deleteBook',async ({title})=>{
+    const res=await httpDeleteBook(title)
+    return {...res,title:title}
+})
+
+export const saveBook=createAsyncThunk('/main/modifyBook',async ({modTitle,modBook,modified},{dispatch})=>{
+    let res=null
+    
+    if(modified)
+        res=await httpUpdateBook(modTitle,modBook)
+    else
+        res=await httpAddBook(modBook)
+    dispatch(showMsg({msg:"Book catalog updated refresh",type:"info"}))
     return res
 })
 
@@ -203,6 +230,13 @@ const mainSlice= createSlice({
             .addCase(cancelOrder.fulfilled,(state,action)=>{
                 state.order=state.order.filter(order=>order.id!=action.payload.id)
                 console.log("Order cancleed!")
+            })
+            .addCase(deleteBook.fulfilled,(state,action)=>{
+                state.books=state.books.filter(book=>book.title!=action.payload.title)
+                console.log("Book deleted "+action.payload.title)
+            })
+            .addCase(saveBook.fulfilled,(state,action)=>{
+                console.log("Saved ")
             })
     }
 })
