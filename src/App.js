@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import React from 'react';
->>>>>>> origin/main
 import './App.css';
 import {Provider} from 'react-redux'
 import store from './reduxStore/store.redux'
@@ -15,7 +11,6 @@ import 'bootstrap/dist/js/bootstrap.bundle'
 
 function App() {
   return (
-<<<<<<< HEAD
     <Provider store={store}>
       <BrowserRouter>
         <div className="App">
@@ -24,11 +19,6 @@ function App() {
         </div>
       </BrowserRouter>
     </Provider>
-=======
-    <div className="App">
-      
-    </div>
->>>>>>> origin/main
   );
 }
 
