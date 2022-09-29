@@ -119,7 +119,7 @@ function Cart(props) {
             <hr/>
             <div className='p-1'>Total Amount : &#8377;{totalAmount}<br/></div>
             <div className='p-1'>
-            {/* {!orderDisplayMode&&<button className='btn btn-primary' width="50px" onClick={handlePlaceOrder}>Place order</button>} */}
+            
             <button className='btn btn-primary' disabled={!isLoggedIn} width="50px" onClick={handlePlaceOrder}>Place order</button>
             </div>
           </div>

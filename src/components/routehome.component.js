@@ -11,6 +11,7 @@ import ViewBook from './viewbook.component'
 import Home from './home.component'
 import Login from './login.component'
 import Register from './register.component'
+import AddBook from './admin-addbook.component'
 
 
 function RouteHome() {
@@ -19,12 +20,9 @@ function RouteHome() {
     useEffect(()=>{
         // loading var does change...but it's too fast
         // for the UI to register
-        
     // comment below line after login implementation!
-        // dispatch(validateLogin({username:"jahnavi",password:"randompass"}))
-
-        console.log("haha loading var changed!!")
-    },[loading])
+        dispatch(validateLogin({username:"admin",password:"admin"}))
+    },[])
     return (
         <div>
             <NavBar/>
@@ -35,6 +33,8 @@ function RouteHome() {
                 <Route path="/order" element={ <Order/> } />
                 <Route path="/viewbook" element={<ViewBook/>}/>
                 <Route path="/register" element={<Register/>}/>
+                <Route path="/addbook" element={<AddBook modify={false}/>}/>
+                <Route path="/modifybook" element={<AddBook modify={true}/>}/>
             </Routes>
         </div>
     )
