@@ -46,7 +46,7 @@ function Home() {
       />
         </div>
         <div className='row pt-4'>
-          {/* this shows all the books in the category even if one of it is matched */}
+          
           {books&&books
             .filter(bookFilter)
             .map(book=>book.category)

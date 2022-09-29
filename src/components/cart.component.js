@@ -8,7 +8,7 @@ import {AiFillCloseCircle} from 'react-icons/ai'
 import {RiArrowDownSFill,RiArrowUpSFill} from "react-icons/ri"
 
 function Cart(props) {
-  // &#8377; is ruppess symbol
+  
   let orderDisplayMode=props.orderMode||false
   let addressRef=useRef()
   let isLoggedIn=useSelector(state=>state.main.isLoggedIn)
@@ -119,7 +119,7 @@ function Cart(props) {
             <hr/>
             <div className='p-1'>Total Amount : &#8377;{totalAmount}<br/></div>
             <div className='p-1'>
-            {/* {!orderDisplayMode&&<button className='btn btn-primary' width="50px" onClick={handlePlaceOrder}>Place order</button>} */}
+            
             <button className='btn btn-primary' disabled={!isLoggedIn} width="50px" onClick={handlePlaceOrder}>Place order</button>
             </div>
           </div>
