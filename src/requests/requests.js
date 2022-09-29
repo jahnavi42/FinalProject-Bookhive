@@ -18,12 +18,7 @@ let demoUsers=[
     {username:"dharshini",password:"dharshini"}
 ]
 
-// book=>
 
-
-// order => id, status 
-
-// create an orders array here!
 let demoOrders=demoDataOrders
 
 const loadOrdersFromLocal=()=>{
@@ -98,10 +93,7 @@ export const httpAddBook=(newBook)=>{
 }
 
 export const httpUpdateBook=(bkTitle,modBook)=>{
-    // modifying a book means
-    // the title will be fixed anything else can be changed
-    // so use modBook.title to access it and set the new values there
-
+    
     if(!isProd){
         demoBooks=demoBooks.map(book=>{
             if(book.title==bkTitle)
