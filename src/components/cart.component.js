@@ -8,7 +8,7 @@ import {AiFillCloseCircle} from 'react-icons/ai'
 import {RiArrowDownSFill,RiArrowUpSFill} from "react-icons/ri"
 
 function Cart(props) {
-  // &#8377; is ruppess symbol
+  
   let orderDisplayMode=props.orderMode||false
   let addressRef=useRef()
   let isLoggedIn=useSelector(state=>state.main.isLoggedIn)
