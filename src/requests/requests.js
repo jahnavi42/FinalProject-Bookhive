@@ -1,8 +1,8 @@
 import axios from "axios";
-// import demoData from './data/demoData.json'
+
 import demoData from './data/demoDataWDesc.json'
 
-// import demoData from './data/demoDataLatest.json'
+
 
 import demoDataOrders from './data/demoOrderData.json'
 
@@ -80,7 +80,7 @@ export const httpGetBooks=()=>{
         console.log("waas here")
         return promiseCreator(demoBooks)
     }else{
-        // add route here
+        
         return makeGetReq('/getBooks')
     }
 }
@@ -91,17 +91,14 @@ export const httpAddBook=(newBook)=>{
         updateLocalStore()
         return promiseCreator({status:"success"})
     }else{
-        // check if same title exists on backend!
-        //  and return appropriately
+        
+        
         return makePostReq('/addbook',newBook)
     }
 }
 
 export const httpUpdateBook=(bkTitle,modBook)=>{
-    // modifying a book means
-    // the title will be fixed anything else can be changed
-    // so use modBook.title to access it and set the new values there
-
+    
     if(!isProd){
         demoBooks=demoBooks.map(book=>{
             if(book.title==bkTitle)
@@ -209,7 +206,7 @@ export const httpValidateLogin=(username,password)=>{
 
 export const httpRegisterUser=(username,password)=>{
     if(!isProd){
-        // push user to the user demo array maybe????
+        
         demoUsers.push({username:username,password:password})
         updateLocalStore()
         return promiseCreator({status:"success"})
