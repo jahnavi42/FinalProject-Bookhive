@@ -23,13 +23,13 @@ function AddBook(props) {
     }
   )
 
-  // saving this bcoz it acts as a key for the old book record
+  
   let originalTitle=tempBook.title
   
 
   const handleFieldChange=(e,fieldName,prevValue)=>{
     let modTemp={...tempBook}
-    // modTemp[fieldName]=typeof prevValue!="number"?e.target.value:parseInt(e.target.value)
+    
     modTemp[fieldName]=e.target.value
     setTempBook(modTemp)
   }
