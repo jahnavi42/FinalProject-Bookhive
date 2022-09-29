@@ -20,7 +20,7 @@ function CategoryBar(props) {
             <div className="col-md-2 h3">{props.category}</div>
             <div className="col-md-10"><hr/></div>
         </div>
-        {books&&books.filter(book=>book.category==props.category)
+        {books&&books.filter(props.bookFilter).filter(book=>book.category==props.category)
         .map(book=>(
             <div className='col-2 pb-3' onClick={()=>handleViewBook(book)}>
                 <div className='card'>
