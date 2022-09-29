@@ -141,13 +141,12 @@ export const httpValidateLogin=(username,password)=>{
 
 export const httpRegisterUser=(username,password)=>{
     if(!isProd){
-<<<<<<< HEAD
         // push user to the user demo array maybe????
-=======
+
         
         demoUsers.push({username:username,password:password})
         updateLocalStore()
->>>>>>> jahnavi
+
         return promiseCreator({status:"success"})
     }else{
         return makePostReq("/registeruser",{username:username,password:password})
