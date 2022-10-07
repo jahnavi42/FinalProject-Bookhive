@@ -56,6 +56,8 @@ function Home() {
             .filter(bookFilter)
             .map(book=>book.category)
             .filter((e,i,a)=>a.indexOf(e)===i)
+            // .map(category=><CategoryBar category={category} key={category}/>)}
+            // {/* .map(category=><CategoryBar category={category} key={category} bookFilter={bookFilter} />)} */}
             .map(category=><CategoryBar category={category} key={category} bookFilter={bookFilter} />)}
         </div>
     </div>
