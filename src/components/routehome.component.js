@@ -21,13 +21,7 @@ function RouteHome() {
         // loading var does change...but it's too fast
         // for the UI to register
     // comment below line after login implementation!
-<<<<<<< HEAD
-    // login persistence
-    
-        // dispatch(validateLogin({username:"admin",password:"admin"}))
-=======
         dispatch(validateLogin({username:"admin",password:"admin"}))
->>>>>>> 01d8cd5c84e961d8b6e9b928d01b2f1fd9becf64
         // dispatch(validateLogin({username:"jahnavi",password:"jahnavi"}))
     },[])
     return (
