@@ -19,8 +19,8 @@
     ],
     "total": 3000,
     "status": "pending",
-    "placedBy": "jahnavi",
-    "paymentInfo":{"type":"Cash"}
+    "placedBy": "jahnavi"
+    
   },
   {
     "id": 1664345815987,
@@ -42,8 +42,8 @@
     ],
     "total": 3000,
     "status": "pending",
-    "placedBy": "dharshini",
-    "paymentInfo":{"type":"Cash"}
+    "placedBy": "dharshini"
+    
   },
   {
     "id": 1664345815988,
@@ -65,8 +65,8 @@
     ],
     "total": 3000,
     "status": "pending",
-    "placedBy": "divya",
-    "paymentInfo":{"type":"Cash"}
+    "placedBy": "divya"
+    
   },
   {
     "id": 1664345815989,
@@ -88,8 +88,7 @@
     ],
     "total": 3000,
     "status": "pending",
-    "placedBy": "reddy",
-    "paymentInfo":{"type":"Cash"}
+    "placedBy": "reddy"
   },
   {
     "id": 1664345815990,
@@ -111,8 +110,8 @@
     ],
     "total": 3000,
     "status": "pending",
-    "placedBy": "reckless",
-    "paymentInfo":{"type":"Cash"}
+    "placedBy": "reckless"
+    
   },
   {
     "id": 1664345815991,
@@ -134,7 +133,7 @@
     ],
     "total": 3000,
     "status": "rejected",
-    "placedBy": "jahnavi",
-    "paymentInfo":{"type":"Cash"}
+    "placedBy": "jahnavi"
+    
   }
 ]

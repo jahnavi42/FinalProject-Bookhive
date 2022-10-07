@@ -9,16 +9,17 @@ function Login() {
   const dispatch=useDispatch()
   const navig=useNavigate()
   let isLoggedIn=useSelector(state=>state.main.isLoggedIn)
-
+  let username=null,password=null
   const handleLogin=()=>{
-    let username=userRef.current.value
-    let password=passRef.current.value
+    username=userRef.current.value
+    password=passRef.current.value
     dispatch(validateLogin({username:username,password:password}))
   }
 
   useEffect(()=>{
-    if(isLoggedIn)
+    if(isLoggedIn){
       navig('/')
+    }
   },[isLoggedIn])
 
   return (

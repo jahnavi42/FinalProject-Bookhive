@@ -1,15 +1,17 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import '../App.css'
 import { useDispatch, useSelector } from 'react-redux'
 import Rating from './rating.component'
-import { addToCart, placeOrder, removeCartItem, setCartTotal, setUserAddress, setViewBook, showMsg } from '../reduxStore/main.slice'
+import { addToCart, placeOrder, removeCartItem, setCartTotal, setPaymentInfo, setUserAddress, setViewBook, showMsg } from '../reduxStore/main.slice'
 import { useNavigate } from 'react-router-dom'
 import {AiFillCloseCircle} from 'react-icons/ai'
 import {RiArrowDownSFill,RiArrowUpSFill} from "react-icons/ri"
 
 function Cart(props) {
-  
+  // &#8377; is ruppess symbol
+  let [payMode,setPayMode]=useState("Cash")
   let orderDisplayMode=props.orderMode||false
+  let infoRef=useRef()
   let addressRef=useRef()
   let isLoggedIn=useSelector(state=>state.main.isLoggedIn)
   let cartItems=useSelector(state=>state.main.cart)
@@ -47,21 +49,25 @@ function Cart(props) {
   const handlePlaceOrder=()=>{
     if(cartItems.length>0){
       let address=addressRef.current.value
-      if(address.length>0){
-        dispatch(setUserAddress())
+      let payNumber=infoRef?.current?.value||""
+      if(address.length>0&&(payMode=="Cash"||payMode!="Cash"&&payNumber.length>0)){
+        dispatch(setUserAddress(address))
+        dispatch(setPaymentInfo({type:payMode,number:payNumber}))
         dispatch(setCartTotal(totalAmount))
         dispatch(placeOrder())
         dispatch(showMsg({msg:"Order Placed",type:"success"}))
       }else{
-        dispatch(showMsg({msg:"Fill in address",type:"error"}))
+        dispatch(showMsg({msg:"Fill in all details",type:"error"}))
       }
     }else{
       dispatch(showMsg({msg:"Add Items to order",type:"error"}))
     }
   }
 
-
-
+  const handlePayChange=(e)=>{
+    console.log("fjhjh")
+    setPayMode(e.target.value)
+  }
   return (
     <div className='row p-4'>
       <div className="col">
@@ -103,6 +109,25 @@ function Cart(props) {
       {!orderDisplayMode&&<div className="col-md-3">
         <div className="col sticky-top2">
           <div className="card h3 p-3">
+            <div className='p-1'>Payment Mode<br/></div>
+            <div className='p-1'>
+              <div className="row pt-2">
+                {new Array("Card","UPI","Cash").map(payType=>
+                  <div className="col h4">
+                  <input type="radio"  defaultChecked={true}  name="payment" value={payType} onClick={handlePayChange}/>
+                  <label for={payType}>{payType}</label>
+                </div>
+                )}
+                <div className='row'>
+                  {payMode!="Cash"&&
+                    <div>
+                      {payMode=="Card"?"Card Number":"UPI Id"}
+                      <input type="text" ref={infoRef}/>
+                    </div>}
+                </div>
+              </div>
+            </div>
+            <hr/>
             <div className='p-1'>
               <div className='pb-3'>Shipping address</div>
               <textarea 
@@ -119,7 +144,7 @@ function Cart(props) {
             <hr/>
             <div className='p-1'>Total Amount : &#8377;{totalAmount}<br/></div>
             <div className='p-1'>
-            
+            {/* {!orderDisplayMode&&<button className='btn btn-primary' width="50px" onClick={handlePlaceOrder}>Place order</button>} */}
             <button className='btn btn-primary' disabled={!isLoggedIn} width="50px" onClick={handlePlaceOrder}>Place order</button>
             </div>
           </div>

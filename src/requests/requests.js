@@ -1,9 +1,6 @@
 import axios from "axios";
-// import demoData from './data/demoData.json'
+
 import demoData from './data/demoDataWDesc.json'
-
-// import demoData from './data/demoDataLatest.json'
-
 import demoDataOrders from './data/demoOrderData.json'
 
 const baseUrl="http://ServerUrlhere"
@@ -87,6 +84,7 @@ export const httpGetBooks=()=>{
 
 export const httpAddBook=(newBook)=>{
     if(!isProd){
+        console.log("add boook pinged")
         demoBooks.push(newBook)
         updateLocalStore()
         return promiseCreator({status:"success"})
@@ -103,11 +101,13 @@ export const httpUpdateBook=(bkTitle,modBook)=>{
     // so use modBook.title to access it and set the new values there
 
     if(!isProd){
+        console.log("modBoook pinged")
         demoBooks=demoBooks.map(book=>{
             if(book.title==bkTitle)
             return modBook
             return book
         })
+        console.log(demoBooks)
         updateLocalStore()
         return promiseCreator({status:"success"})
     }else{
@@ -150,13 +150,24 @@ export const httpUpdateOrderStatus=(orderId,status)=>{
     // here it is true:succes and false:failure
 
     if(!isProd){
-        demoOrders=demoOrders.map(order=>{
-            if(order.id==orderId){
-                order.status=status?"success":"failure"
-                return order
-            }
-            return order
-        })
+        console.log("status change"+status)
+        let changeOrder=demoOrders.find(o=>o.id==orderId)
+        changeOrder.status=status
+        demoOrders=demoOrders.filter(order=>order.id!=orderId)
+        demoOrders.push(changeOrder)
+        // demoOrders.
+        // demoOrders=demoOrders.map(order=>{
+        //     if(+order.id==+orderId){
+        //         order.status=status?"success":"rejected"
+        //     }
+        //     return order
+        // })
+        // let changeInd=demoOrders.findIndex(o=>o.id==orderId)
+        // console.log(changeInd)
+        // demoOrders[changeInd].status=status?"success":"rejected"
+        // console.log(demoOrders)
+
+        // demoOrders=demoOrders.map(order=>{return({...order,status:"success"})})
         updateLocalStore()
         return promiseCreator({status:"success"})
     }else{
@@ -164,7 +175,7 @@ export const httpUpdateOrderStatus=(orderId,status)=>{
     }
 }
 
-export const httpPlaceOrder=(cartBooks,total,placedBy,address)=>{
+export const httpPlaceOrder=(cartBooks,total,placedBy,address,paymentInfo)=>{
     // a
     console.log(cartBooks)
     console.log("Place order req!")
@@ -176,9 +187,9 @@ export const httpPlaceOrder=(cartBooks,total,placedBy,address)=>{
             status:"pending",
             placedBy:placedBy,
             address:address,
-            random:"HEllloo"
+            paymentInfo:paymentInfo
         }
-        console.log("Chekc"+" "+JSON.stringify(newOrder))
+        console.log("New Order"+" "+JSON.stringify(newOrder))
         console.log(JSON.stringify(newOrder))
         demoOrders.push(newOrder)
         updateLocalStore()
@@ -189,7 +200,8 @@ export const httpPlaceOrder=(cartBooks,total,placedBy,address)=>{
             total:total,
             status:"pending",
             placedBy:placedBy,
-            address:address
+            address:address,
+            paymentInfo:paymentInfo
         }
         // backend must generate id for the object and return it in response
         return makePostReq('/placeorder',{order:newOrder})

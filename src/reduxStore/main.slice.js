@@ -11,15 +11,16 @@ import {
     httpRegisterUser,
     httpCancelOrder,
     httpDeleteBook
-} from '../requests/requests'
+// } from '../requests/requests'
+} from '../requests/requestsnew'
 
 import NotificationManager from "react-notifications/lib/NotificationManager"
 
-const initalState={
-    isAdmin:false,
-    username:null,
-    pass:null,
-    isLoggedIn:false,
+const initialState={
+    isAdmin:localStorage.getItem('isAdmin')=="true"||false,
+    username:localStorage.getItem('username')||null,
+    pass:localStorage.getItem('pass')||null,
+    isLoggedIn:localStorage.getItem('isLoggedIn')=="true"||false,
     books:[],
     cart:[],
     order:[],
@@ -27,7 +28,11 @@ const initalState={
     cartTotal:null,
     loading:false,
     displayMode:false,
-    userAddress:null
+    userAddress:null,
+    paymentInfo:{
+        type:null,
+        value:null
+    }
 
     // cartItem => book props+qty+subtotal
     // order    => info+cartItemsprops+status+
@@ -55,9 +60,9 @@ export const getAllBooks=createAsyncThunk('/main/getAllBooks',async ()=>{
 })
 
 export const placeOrder=createAsyncThunk('/main/placeOrder',async (arg,{dispatch,getState})=>{
-    let {cart,cartTotal,username,userAddress}=getState().main
+    let {cart,cartTotal,username,userAddress,paymentInfo}=getState().main
     console.log("In place order")
-    const res=await httpPlaceOrder(cart,cartTotal,username,userAddress)
+    const res=await httpPlaceOrder(cart,cartTotal,username,userAddress,paymentInfo)
     console.log(res)
     return res
 })
@@ -79,6 +84,12 @@ export const getAllOrders=createAsyncThunk('/main/getAllOrders',async (arg,{disp
     return res
 })
 
+export const updateOrder=createAsyncThunk('/main/updateOrder',async ({id,newStatus})=>{
+    console.log("new state"+newStatus+id)
+    const res=await httpUpdateOrderStatus(id,newStatus)
+    return {...res,status:newStatus,orderId:id}
+})
+
 export const validateLogin=createAsyncThunk('main/validateLogin',async ({username,password},{dispatch})=>{
     dispatch(setUserInfo({username:username,password:password}))
     const res=await httpValidateLogin(username,password)
@@ -97,11 +108,14 @@ export const deleteBook=createAsyncThunk('/main/deleteBook',async ({title})=>{
 
 export const saveBook=createAsyncThunk('/main/modifyBook',async ({modTitle,modBook,modified},{dispatch})=>{
     let res=null
+    console.log("save Book called with")
+    console.log({modTitle,modBook,modified})
     
     if(modified)
         res=await httpUpdateBook(modTitle,modBook)
     else
         res=await httpAddBook(modBook)
+
     dispatch(showMsg({msg:"Book catalog updated refresh",type:"info"}))
     return res
 })
@@ -109,7 +123,7 @@ export const saveBook=createAsyncThunk('/main/modifyBook',async ({modTitle,modBo
 
 const mainSlice= createSlice({
     name:"main",
-    initialState:initalState,
+    initialState:initialState,
     reducers:{
         // decide on all reducers here
         setLoader:(state,action)=>{
@@ -134,9 +148,16 @@ const mainSlice= createSlice({
             state.isAdmin=false
             state.username=null
             state.password=null
+            // add to clear persisted store
+            localStorage.clear()
+
+            state={...initialState}
         },
         setCartTotal:(state,action)=>{
             state.cartTotal=action.payload
+        },
+        setPaymentInfo:(state,action)=>{
+            state.paymentInfo=action.payload
         },
         setUserAddress:(state,action)=>{
             state.userAddress=action.payload
@@ -196,7 +217,10 @@ const mainSlice= createSlice({
             .addCase(getAllBooks.fulfilled,(state,action)=>{
                 console.log("fulfilled books")
                 console.log(action.payload)
-                state.books=action.payload
+                // action.payload is now "action.payload.data"
+                // change those on everything
+                // and also check how to handle the arrays
+                state.books=action.payload.data
                 state.loading=false
             })
             .addCase(getAllBooks.rejected,(state,action)=>{
@@ -205,9 +229,17 @@ const mainSlice= createSlice({
                 state.books=null
             })
             .addCase(validateLogin.fulfilled,(state,action)=>{
-                let {status,isAdmin}=action.payload
+                let {status,isAdmin}=action.payload.data
                 state.isLoggedIn=status=="success"?true:false
                 state.isAdmin=isAdmin
+                console.log(action.payload.data)
+
+                // added to persist login on refresh
+                localStorage.setItem('isLoggedIn',state.isLoggedIn)
+                localStorage.setItem('isAdmin',state.isAdmin)
+                localStorage.setItem('username',state.username)
+                localStorage.setItem('password',state.pass)
+
                 console.log("im herhe"+JSON.stringify(action.payload))
             })
             .addCase(validateLogin.rejected,(state,action)=>{
@@ -216,7 +248,7 @@ const mainSlice= createSlice({
                 state.password=null
             })
             .addCase(getAllOrders.fulfilled,(state,action)=>{
-                state.order=action.payload
+                state.order=action.payload.data
             })
             .addCase(placeOrder.fulfilled,(state,action)=>{
                 state.cart=[]
@@ -231,12 +263,22 @@ const mainSlice= createSlice({
                 state.order=state.order.filter(order=>order.id!=action.payload.id)
                 console.log("Order cancleed!")
             })
+            .addCase(updateOrder.fulfilled,(state,action)=>{
+                let {orderId,newStatus}=action.payload.data
+                state.order=state.order.map(order=>{
+                    if(order.id==orderId)
+                    return {...order,status:newStatus}
+                    else
+                    return order
+                })
+            })
             .addCase(deleteBook.fulfilled,(state,action)=>{
                 state.books=state.books.filter(book=>book.title!=action.payload.title)
-                console.log("Book deleted "+action.payload.title)
+                console.log("Book deleted "+action.payload.data.title)
             })
             .addCase(saveBook.fulfilled,(state,action)=>{
                 console.log("Saved ")
+                state.viewingBook=null
             })
     }
 })
@@ -246,7 +288,7 @@ export const { setLoader,setViewBook,setAdmin,
     showMsg,setUserInfo,logout,
     addToCart,setCartTotal,setOrders,
     removeCartItem,setCartItems,toggleDisplayMode,
-    setUserAddress
+    setUserAddress,setPaymentInfo
     
  }=mainSlice.actions
 export default mainSlice.reducer

@@ -59,6 +59,8 @@ function ViewBook() {
                         <div className="col p-1">{book.author}</div>
                         <div className="col p-1">{book.category}</div>
                         <div className="col p-1">{book.published}</div>
+                        <div className="col p-1">Price</div>
+                        <div className="col p-1">{book.price}</div>
                         <div className="col p-1"><Rating rating={book.rating}/></div>
                       </div>
                     </div>
